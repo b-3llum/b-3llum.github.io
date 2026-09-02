@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>b-3llum</title>
+  <meta name="description" content="Links to my projects and portfolio.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #fbfbf9;
+      --fg: #1a1a1a;
+      --muted: #6a6a66;
+      --rule: #e2e2dc;
+      --link: #245bb3;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16161a;
+        --fg: #e8e8e6;
+        --muted: #9a9a96;
+        --rule: #2c2c32;
+        --link: #7fa8e6;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 17px/1.6 Georgia, "Times New Roman", serif;
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+    main { width: 100%; max-width: 34rem; }
+    h1 {
+      font-size: 1.6rem;
+      letter-spacing: 0.5px;
+      margin: 0 0 0.25rem;
+    }
+    .tagline {
+      color: var(--muted);
+      font-style: italic;
+      margin: 0 0 1.75rem;
+    }
+    ul { list-style: none; margin: 0; padding: 0; }
+    li { border-top: 1px solid var(--rule); }
+    li:last-child { border-bottom: 1px solid var(--rule); }
+    a.item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.4rem 0.75rem;
+      padding: 0.9rem 0.25rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    a.item:hover .name,
+    a.item:focus .name { color: var(--link); text-decoration: underline; }
+    .name { font-weight: 700; }
+    .desc { color: var(--muted); font-size: 0.92rem; font-style: italic; }
+    footer {
+      margin-top: 1.75rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--link); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>b-3llum</h1>
+    <p class="tagline">A few things I&rsquo;ve made.</p>
+    <ul>
+      <li>
+        <a class="item" href="https://bellums.org/">
+          <span class="name">bellums.org</span>
+          <span class="desc">Portfolio</span>
+        </a>
+      </li>
+      <li>
+        <a class="item" href="https://b-3llum.github.io/out-of-the-cave/">
+          <span class="name">Out of the Cave</span>
+          <span class="desc">Mathematics problems, not answers</span>
+        </a>
+      </li>
+      <li>
+        <a class="item" href="https://b-3llum.github.io/hors-de-la-caverne/">
+          <span class="name">Hors de la Caverne</span>
+          <span class="desc">Des probl&egrave;mes de math&eacute;matiques, pas de r&eacute;ponses</span>
+        </a>
+      </li>
+    </ul>
+    <footer>
+      <a href="https://github.com/b-3llum">github.com/b-3llum</a>
+    </footer>
+  </main>
+</body>
+</html>
