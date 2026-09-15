@@ -15,7 +15,7 @@ from xml.sax.saxutils import escape
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import writeups  # noqa: E402
 
-SITE = "https://psu-abington-cisa.github.io/writing/"
+SITE = "https://cisa.cybernet.rocks/writing/"
 TITLE = "CISA Write-ups"
 SUBTITLE = "CTF write-ups, lab notes, and guides from the Cybersecurity & IT Student Association at Penn State Abington."
 SITE_AUTHOR = "CISA @ Penn State Abington"

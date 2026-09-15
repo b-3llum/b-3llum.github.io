@@ -1,6 +1,6 @@
 # CISA Write-ups
 
-Source for [psu-abington-cisa.github.io/writing](https://psu-abington-cisa.github.io/writing/),
+Source for [cisa.cybernet.rocks/writing](https://cisa.cybernet.rocks/writing/),
 the write-ups site for the Cybersecurity & IT Student Association (CISA) at Penn State Abington.
 CTF write-ups, lab notes, and guides live here; the club's main site is
 [cisa.cybernet.rocks](https://cisa.cybernet.rocks/).
@@ -63,7 +63,7 @@ LaTeX between `$...$` or `$$...$$` renders too. A literal dollar sign in prose i
 
 **Before you publish:** don't post flags or solutions for challenges that are still live if the
 platform's rules forbid it, and redact any real credentials. See
-[How to write a CTF write-up](https://psu-abington-cisa.github.io/writing/#how-to-write-a-ctf-writeup)
+[How to write a CTF write-up](https://cisa.cybernet.rocks/writing/#how-to-write-a-ctf-writeup)
 for the structure we use.
 
 ## Preview locally
@@ -88,10 +88,11 @@ dates parse, referenced images exist, and no `.md` in `posts/` has been left out
 
 ## How it is served
 
-- GitHub Pages serves the `main` branch of this repo at
-  `psu-abington-cisa.github.io/writing/`. Moving it to a subdomain of the main site later only
-  needs a `CNAME` file here plus a DNS record — nothing in the code changes, since every path is
-  relative.
+- GitHub Pages serves the `main` branch of this repo at `cisa.cybernet.rocks/writing/`. The
+  main site's repo sets `cisa.cybernet.rocks` as the organization's custom domain, and GitHub
+  serves every other repo's Pages site under that domain as a subpath — so this repo needs no
+  `CNAME` file or DNS record of its own. (`psu-abington-cisa.github.io/writing/` redirects
+  there.) Every path in the code is relative, so it would also work from any other base URL.
 - `.nojekyll` must stay. Without it GitHub runs Jekyll, which turns every `posts/*.md` with
   frontmatter into an `.html` page and stops serving the raw `.md` files that `app.js` fetches.
 - No third-party requests. `vendor/` holds pinned copies of marked 18.0.12, DOMPurify 3.4.15 and
