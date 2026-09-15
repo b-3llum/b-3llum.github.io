@@ -25,7 +25,7 @@
       "date": "2026-09-17",
       "start": "12:15",
       "end": "13:15",
-      "location": "TBD",
+      "location": "Woodland Building 132A",
       "type": "come-hack",
       "summary": "Biweekly hands-on session: learn how real systems are attacked, defended, investigated, and analyzed. Laptop recommended; workstations available.",
       "description": "Led by Moussa Toure. Guided learning plus practical labs on cyber ranges (TryHackMe, OffSec Labs, Hack Smarter, PortSwigger) and custom-built labs. No prior experience required.",
