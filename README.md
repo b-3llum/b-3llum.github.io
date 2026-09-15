@@ -70,16 +70,41 @@ If you're unsure whether your edit is valid JSON, paste it into a linter like
 Roster lives in [`data/board.json`](data/board.json). Each member is:
 
 ```json
-{ "name": "Full Name", "role": "Role Title", "photo": "", "email": "", "linkedin": "" }
+{ "name": "Full Name", "role": "Role Title", "photo": "", "email": "", "linkedin": "", "portfolio": "" }
 ```
 
-- `name` and `role` are required. `photo`, `email`, and `linkedin` are optional — leave them as
-  empty strings `""` if unknown.
+- `name` and `role` are required. `photo`, `email`, `linkedin`, and `portfolio` are optional —
+  leave them as empty strings `""` if unknown, or leave the key out entirely.
+- `linkedin` and `portfolio` must be full URLs starting with `http://` or `https://`. Each one
+  that's filled in adds a link under the member's name.
 - To add a photo: upload a square image (recommended ≥400×400px, JPG or PNG) into
   [`assets/img/board/`](assets/img/board/), then set `"photo"` to the filename only, e.g.
   `"jason-mathew.jpg"` (the site automatically looks inside `assets/img/board/`).
 - Members with no photo show a placeholder avatar. A member named exactly `"Name TBD"` shows a
   "Photo coming soon" note instead of initials.
+
+## Update the founders
+
+The club's founders are listed separately, in [`data/founders.json`](data/founders.json), under a
+`"founders"` array. Each founder is:
+
+```json
+{
+  "name": "Full Name",
+  "role": "Founder",
+  "title": "Job Title",
+  "org": "Employer",
+  "photo": "",
+  "email": "",
+  "linkedin": ""
+}
+```
+
+- Same rules as board members, plus two extra optional fields: `title` (their current job title)
+  and `org` (where they work). They render together under the role, as `Job Title · Employer`.
+  Fill in either, both, or neither.
+- Founder photos go in `assets/img/founders/` (not `assets/img/board/`) — create that folder when
+  you add the first one. Founders with no photo show the same placeholder avatar as the e-board.
 
 ## Preview locally
 
@@ -96,14 +121,14 @@ Then open <http://localhost:8080> in a browser.
 Before committing changes to the data files, it's good practice to run:
 
 ```
-python3 scripts/validate.py     # validates data/events.json and data/board.json
+python3 scripts/validate.py     # validates data/events.json, data/board.json, data/founders.json
 node scripts/test-main.js       # unit tests for the calendar/date logic (no dependencies)
 ```
 
 `scripts/validate.py` checks: valid JSON, required fields present, dates/times in the right
 format and internally consistent, `type` is an allowed value, `id`s are unique, `repeat` blocks
-are well-formed, URLs start with `http(s)://`, and referenced board photos actually exist under
-`assets/img/board/`.
+are well-formed, URLs start with `http(s)://`, and referenced photos actually exist under
+`assets/img/board/` (e-board) or `assets/img/founders/` (founders).
 
 A GitHub Actions workflow ([`.github/workflows/validate-data.yml`](.github/workflows/validate-data.yml))
 runs `scripts/validate.py` automatically on every push and pull request that touches the data
@@ -122,9 +147,11 @@ assets/fonts/LICENSE-Roboto.txt  Roboto's OFL license
 assets/img/cisa-logo.jpg         Club logo (also the favicon)
 assets/img/avatar-placeholder.svg  Placeholder avatar for board members with no photo
 assets/img/board/                 Board member photos go here
+assets/img/founders/              Founder photos go here (create it when you add one)
 data/events.json                 Schedule data — edit this to add/change events
 data/board.json                  E-board roster — edit this to add/change members
-scripts/validate.py              Validates the two data files (used by CI)
+data/founders.json               Club founders — edit this to add/change founders
+scripts/validate.py              Validates the three data files (used by CI)
 scripts/test-main.js             Node unit tests for assets/js/main.js helpers
 .github/workflows/validate-data.yml  CI: runs the validator on push/PR
 ```

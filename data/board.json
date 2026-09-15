@@ -35,7 +35,7 @@
       "role": "Social Media Director",
       "photo": "zainab.jpg",
       "email": "zka5081@psu.edu",
-      "linkedin": ""
+      "linkedin": "https://www.linkedin.com/in/zainab-afridi-52zzz/"
     },
     {
       "name": "Fatima Mohamed",
@@ -49,14 +49,22 @@
       "role": "Event Planner",
       "photo": "moussa.jpeg",
       "email": "mmt6227@psu.edu",
-      "linkedin": "https://www.linkedin.com/in/moussa-toure-cyber/"
+      "linkedin": "https://www.linkedin.com/in/moussa-toure-cyber/",
+      "portfolio": "https://bellums.org/"
     },
     {
       "name": "Joseph Oakes",
       "role": "Co-Advisor",
       "photo": "",
       "email": "jxo19@psu.edu",
-      "linkedin": ""
+      "linkedin": "https://www.linkedin.com/in/joe-oakes-71022420/"
+    },
+    {
+      "name": "Maryam Roshanaei",
+      "role": "Co-Advisor",
+      "photo": "",
+      "email": "mur45@psu.edu",
+      "linkedin": "https://www.linkedin.com/in/maryamroshanaei/"
     }
   ]
 }

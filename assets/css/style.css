@@ -784,6 +784,7 @@ details.past-details summary {
 }
 .board-card h3 { font-size: .95rem; margin-bottom: .15em; }
 .board-role { color: var(--accent-2); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .6em; }
+.board-title { color: var(--muted); font-size: .8rem; line-height: 1.4; margin-bottom: .4em; }
 .board-soon { color: var(--muted); font-size: .74rem; font-style: normal; }
 .board-links { display: flex; justify-content: center; gap: 10px; margin-top: .6em; font-size: .8rem; }
 

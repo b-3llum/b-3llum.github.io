@@ -270,6 +270,7 @@
       events: [],       // raw events from JSON (unexpanded)
       occurrences: [],  // expanded + sorted occurrences
       board: [],
+      founders: [],
       view: null,       // 'month' | 'list'
       cursorYear: null,
       cursorMonth: null, // 0-based
@@ -281,6 +282,7 @@
       wireThemeToggle();
       loadEvents();
       loadBoard();
+      loadFounders();
     });
 
     function wireStaticUI() {
@@ -390,6 +392,22 @@
         .catch(function (err) {
           console.error('Failed to load board.json', err);
           renderBoardError();
+        });
+    }
+
+    function loadFounders() {
+      fetch('./data/founders.json', { cache: 'no-cache' })
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          state.founders = Array.isArray(data.founders) ? data.founders : [];
+          renderFounders();
+        })
+        .catch(function (err) {
+          console.error('Failed to load founders.json', err);
+          renderFoundersError();
         });
     }
 
@@ -721,12 +739,47 @@
       return html;
     }
 
-    // ---------------- Board ----------------
+    // ---------------- People (e-board + founders) ----------------
 
     function initials(name) {
       var parts = String(name).trim().split(/\s+/);
       if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
       return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+    }
+
+    // Renders one person card. `imgDir` is the folder their photo lives in.
+    function personCard(m, imgDir) {
+      var isTbd = m.name === 'Name TBD';
+      var html = '<div class="board-card">';
+      if (m.photo) {
+        html += '<img class="board-avatar" src="' + escapeHtml(imgDir + m.photo) + '" alt="' + escapeHtml(m.name) + '">';
+      } else {
+        html += '<img class="board-avatar" src="assets/img/avatar-placeholder.svg" alt="' + (isTbd ? '?' : escapeHtml(initials(m.name))) + '">';
+      }
+      html += '<h3>' + escapeHtml(m.name) + '</h3>';
+      html += '<div class="board-role">' + escapeHtml(m.role) + '</div>';
+      if (m.title || m.org) {
+        var bits = [];
+        if (m.title) bits.push(m.title);
+        if (m.org) bits.push(m.org);
+        html += '<div class="board-title">' + escapeHtml(bits.join(' \u00b7 ')) + '</div>';
+      }
+      if (isTbd) {
+        html += '<div class="board-soon">Photo coming soon</div>';
+      }
+      var links = [];
+      if (m.email && isSafeUrl('mailto:' + m.email)) {
+        links.push('<a href="mailto:' + escapeHtml(m.email) + '">Email</a>');
+      }
+      if (m.linkedin && isSafeUrl(m.linkedin)) {
+        links.push('<a href="' + escapeHtml(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn</a>');
+      }
+      if (m.portfolio && isSafeUrl(m.portfolio)) {
+        links.push('<a href="' + escapeHtml(m.portfolio) + '" target="_blank" rel="noopener">Portfolio</a>');
+      }
+      if (links.length) html += '<div class="board-links">' + links.join('') + '</div>';
+      html += '</div>';
+      return html;
     }
 
     function renderBoard() {
@@ -738,27 +791,7 @@
       }
       var html = '';
       state.board.forEach(function (m) {
-        var isTbd = m.name === 'Name TBD';
-        html += '<div class="board-card">';
-        if (m.photo) {
-          html += '<img class="board-avatar" src="' + escapeHtml('assets/img/board/' + m.photo) + '" alt="' + escapeHtml(m.name) + '">';
-        } else {
-          html += '<img class="board-avatar" src="assets/img/avatar-placeholder.svg" alt="' + (isTbd ? '?' : escapeHtml(initials(m.name))) + '">';
-        }
-        html += '<h3>' + escapeHtml(m.name) + '</h3>';
-        html += '<div class="board-role">' + escapeHtml(m.role) + '</div>';
-        if (isTbd) {
-          html += '<div class="board-soon">Photo coming soon</div>';
-        }
-        var links = [];
-        if (m.email && isSafeUrl('mailto:' + m.email)) {
-          links.push('<a href="mailto:' + escapeHtml(m.email) + '">Email</a>');
-        }
-        if (m.linkedin && isSafeUrl(m.linkedin)) {
-          links.push('<a href="' + escapeHtml(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn</a>');
-        }
-        if (links.length) html += '<div class="board-links">' + links.join('') + '</div>';
-        html += '</div>';
+        html += personCard(m, 'assets/img/board/');
       });
       el.innerHTML = html;
     }
@@ -766,6 +799,25 @@
     function renderBoardError() {
       var el = document.getElementById('board-grid');
       if (el) el.innerHTML = '<p class="empty-msg">Could not load the e-board roster right now. Please check back later.</p>';
+    }
+
+    function renderFounders() {
+      var el = document.getElementById('founders-grid');
+      if (!el) return;
+      if (state.founders.length === 0) {
+        el.innerHTML = '<p class="empty-msg">Founder information is not available right now.</p>';
+        return;
+      }
+      var html = '';
+      state.founders.forEach(function (f) {
+        html += personCard(f, 'assets/img/founders/');
+      });
+      el.innerHTML = html;
+    }
+
+    function renderFoundersError() {
+      var el = document.getElementById('founders-grid');
+      if (el) el.innerHTML = '<p class="empty-msg">Could not load the founders right now. Please check back later.</p>';
     }
   }
 

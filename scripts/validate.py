@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validates data/events.json and data/board.json.
+Validates data/events.json, data/board.json, and data/founders.json.
 
 Usage: python3 scripts/validate.py
 Exits 0 if everything is valid, 1 (with a list of problems) otherwise.
@@ -15,7 +15,9 @@ from datetime import date, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EVENTS_PATH = os.path.join(ROOT, "data", "events.json")
 BOARD_PATH = os.path.join(ROOT, "data", "board.json")
+FOUNDERS_PATH = os.path.join(ROOT, "data", "founders.json")
 BOARD_IMG_DIR = os.path.join(ROOT, "assets", "img", "board")
+FOUNDERS_IMG_DIR = os.path.join(ROOT, "assets", "img", "founders")
 
 ALLOWED_TYPES = {"meeting", "come-hack", "workshop", "social", "competition", "other"}
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -130,6 +132,36 @@ def validate_events(data):
                     fail("{0}: repeat.skip must be an array of YYYY-MM-DD dates".format(where))
 
 
+def validate_person(m, idx, label, img_dir, img_dir_label):
+    """Shared checks for a board member or a founder."""
+    where = "{0}[{1}]".format(label, idx)
+    if not isinstance(m, dict):
+        fail("{0}: not an object".format(where))
+        return
+    name = m.get("name")
+    where = "{0} '{1}'".format(label, name or idx)
+    if not name:
+        fail("{0}: missing required field 'name'".format(where))
+    if not m.get("role"):
+        fail("{0}: missing required field 'role'".format(where))
+
+    photo = m.get("photo", "")
+    if photo:
+        photo_path = os.path.join(img_dir, photo)
+        if not os.path.isfile(photo_path):
+            fail("{0}: photo '{1}' not found under {2}".format(where, photo, img_dir_label))
+
+    email = m.get("email", "")
+    if email and "@" not in email:
+        fail("{0}: 'email' does not look like an email address: '{1}'".format(where, email))
+
+    for urlfield in ("linkedin", "portfolio"):
+        url = m.get(urlfield, "")
+        if url and not re.match(r"^https?://", url):
+            fail("{0}: '{1}' must start with http:// or https://, got '{2}'".format(
+                where, urlfield, url))
+
+
 def validate_board(data):
     if data is None:
         return
@@ -138,38 +170,28 @@ def validate_board(data):
         return
 
     for idx, m in enumerate(data["members"]):
-        where = "board.json: member[{0}]".format(idx)
-        if not isinstance(m, dict):
-            fail("{0}: not an object".format(where))
-            continue
-        name = m.get("name")
-        where = "board.json: member '{0}'".format(name or idx)
-        if not name:
-            fail("{0}: missing required field 'name'".format(where))
-        if not m.get("role"):
-            fail("{0}: missing required field 'role'".format(where))
+        validate_person(m, idx, "board.json: member", BOARD_IMG_DIR, "assets/img/board/")
 
-        photo = m.get("photo", "")
-        if photo:
-            photo_path = os.path.join(BOARD_IMG_DIR, photo)
-            if not os.path.isfile(photo_path):
-                fail("{0}: photo '{1}' not found under assets/img/board/".format(where, photo))
 
-        email = m.get("email", "")
-        if email and "@" not in email:
-            fail("{0}: 'email' does not look like an email address: '{1}'".format(where, email))
+def validate_founders(data):
+    if data is None:
+        return
+    if "founders" not in data or not isinstance(data["founders"], list):
+        fail("founders.json: missing top-level 'founders' array")
+        return
 
-        linkedin = m.get("linkedin", "")
-        if linkedin and not re.match(r"^https?://", linkedin):
-            fail("{0}: 'linkedin' must start with http:// or https://, got '{1}'".format(where, linkedin))
+    for idx, f in enumerate(data["founders"]):
+        validate_person(f, idx, "founders.json: founder", FOUNDERS_IMG_DIR, "assets/img/founders/")
 
 
 def main():
     events_data = load_json(EVENTS_PATH, "events.json")
     board_data = load_json(BOARD_PATH, "board.json")
+    founders_data = load_json(FOUNDERS_PATH, "founders.json")
 
     validate_events(events_data)
     validate_board(board_data)
+    validate_founders(founders_data)
 
     if problems:
         print("Found {0} problem(s):\n".format(len(problems)))
@@ -177,7 +199,7 @@ def main():
             print("  - " + p)
         sys.exit(1)
 
-    print("OK: events.json and board.json are valid.")
+    print("OK: events.json, board.json, and founders.json are valid.")
     sys.exit(0)
 
 
