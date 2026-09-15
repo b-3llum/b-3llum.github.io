@@ -78,18 +78,6 @@ it sooner? This section is the one people actually reuse.
 - **Padding.** A tight 600 words beats a loose 2,000. If a section has nothing
   to say, delete the heading.
 
-## Formatting that works here
-
-Standard Markdown, fenced code blocks, tables, and images all render. Inline
-math like $2^{32}$ and display math
-
-$$
-H(m) = \text{SHA-256}(m) \pmod{2^{64}}
-$$
-
-render too, for the crypto write-ups. A literal dollar sign in prose is
-written `\$`.
-
 ## Getting it published
 
 1. Save your write-up as a Markdown file in `posts/`, starting with the same
